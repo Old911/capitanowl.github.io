@@ -1,11 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Capitanowl</title>
+<meta charset="UTF-8">
+<title>CRN Whitelist</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #0b1d3a, #05070f);
+  color: white;
+}
+
+.container {
+  max-width: 420px;
+  margin: 40px auto;
+  background: #0d1220;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0,120,255,0.25);
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 20px;
+  width: 140px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input, textarea, select, button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+input, textarea, select {
+  background: #141a2e;
+  color: white;
+}
+
+textarea {
+  resize: none;
+  height: 90px;
+}
+
+button {
+  margin-top: 15px;
+  background: linear-gradient(135deg, #1e90ff, #0066ff);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+#msg {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+</style>
 </head>
-<body style="background:#0b0f1a;color:white;text-align:center;">
-  <h1>Site khdam ✅</h1>
-  <p>GitHub Pages خدام دابا</p>
+
+<body>
+
+<div class="container">
+  <img src="logo.png" class="logo">
+  <h2>CRN Whitelist</h2>
+
+  <input id="nameirl" placeholder="NAME IRL">
+  <input id="namerp" placeholder="NAME RP">
+  <input id="ageirl" type="number" placeholder="AGE IRL">
+  <input id="agerp" type="number" placeholder="AGE RP">
+
+  <select id="type">
+    <option value="">LEGAL / ILLEGAL</option>
+    <option value="LEGAL">LEGAL</option>
+    <option value="ILLEGAL">ILLEGAL</option>
+  </select>
+
+  <textarea id="story" placeholder="STORY"></textarea>
+
+  <button onclick="send()">SEND APPLICATION</button>
+  <div id="msg"></div>
+</div>
+
+<script>
+const webhook = "PUT_YOUR_WEBHOOK_HERE";
+
+function send() {
+  const data = {
+    nameirl: nameirl.value,
+    namerp: namerp.value,
+    ageirl: ageirl.value,
+    agerp: agerp.value,
+    type: type.value,
+    story: story.value
+  };
+
+  if (Object.values(data).some(v => v === "")) {
+    msg.innerText = "❌ Fill all fields";
+    return;
+  }
+
+  fetch(webhook, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      embeds: [{
+        title: "📝 New Whitelist Application",
+        color: 3447003,
+        fields: [
+          {name:"NAME IRL", value:data.nameirl},
+          {name:"NAME RP", value:data.namerp},
+          {name:"AGE IRL", value:data.ageirl},
+          {name:"AGE RP", value:data.agerp},
+          {name:"TYPE", value:data.type},
+          {name:"STORY", value:data.story}
+        ]
+      }]
+    })
+  }).then(() => {
+    msg.innerText = "✅ Application sent";
+  });
+}
+</script>
+
 </body>
 </html>
